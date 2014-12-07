@@ -1,0 +1,26 @@
+{
+  "name": "exoskeleton",
+  "version": "2.0.0",
+  "description": "Exoskeleton - Responsive CSS Scaffolding",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "css",
+    "framework",
+    "css3",
+    "media",
+    "queries",
+    "responsive"
+  ],
+  "author": "Guillaume VanderEst <gui@exo.me>",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-less": "^0.12.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
