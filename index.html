@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="release/exoskeleton.min.css" />
+        <style>
+        .column {
+            padding: 0 5px 5px 0;
+        }
+        .pretty {
+            background: #aaa;
+            text-align: center;
+            border-radius: 3px;
+            padding: 5px 10px;
+        }
+        </style>
+        <script src="http://coffeescript.org/extras/coffee-script.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    </head>
+    <body id="body" ng-controller="DemoController">
+
+<script type="text/coffeescript">
+properCase = (input) ->
+    return input[0].toUpperCase() + input.substring(1).toLowerCase()
+
+window.Exoskeleton = angular.module('Exoskeleton', [])
+
+Exoskeleton.controller('DemoController', ($scope) ->
+    total_columns = 16
+    all_sizes = ['column', 'large', 'medium', 'small']
+
+    sizes = []
+    for s in all_sizes
+        size = {
+            name: properCase(s)
+            rows: []
+        }
+        sizes.push(size)
+
+        # For each size of columns (defaults to 16)..
+        # Start building configurations..
+        for x in [1..total_columns]
+
+            # Column and its opposite
+            opposites = {
+                classes: ['gutters']
+                columns: []
+            }
+            size.rows.push(opposites)
+
+            opposites.columns.push({
+                text: x,
+                classes: [s + '-' + x]
+            })
+            opposite = (total_columns - x)
+
+            if opposite > 0
+                opposites.columns.push({
+                    text: opposite,
+                    classes: [s + '-' + opposite]
+                })
+
+
+            # Fully divisible sizes
+            if x < total_columns && total_columns % x == 0
+                divisibles = {
+                    classes: ['gutters']
+                    columns: []
+                }
+                size.rows.push(divisibles)
+
+                for y in [1..(total_columns / x)]
+                    divisibles.columns.push({
+                        text: x,
+                        classes: [s + '-' + x]
+                    })
+
+
+    # Make the columns pretty for the demo
+    for size in sizes
+        for row in size.rows
+            for col in row.columns
+                col.classes.push('column')
+
+    # Link to scope
+    $scope.sizes = sizes
+    $scope.size = $scope.sizes[0]
+)
+
+angular.bootstrap(document.getElementById('body'), ['Exoskeleton'])
+</script>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="header row">
+            <div class="large-8 medium-8 pad-medium">
+                <h1>Exoskeleton</h1>
+                <h2>Responsive CSS Scaffolding</h2>
+            </div> <!-- .column-8 -->
+        </div> <!-- .header row -->
+        <div class="body row">
+            <p>{{ rows }}</p>
+            <p>Select the 'size' class you wish to use: <select ng-model="size" ng-options="size as size.name for size in sizes"></select></p>
+            <div ng-repeat="row in size.rows" ng-class="row.classes">
+                <div ng-repeat="col in row.columns" ng-class="col.classes"><div class="pretty">{{ col.text }}</div></div> <!-- @columns -->
+            </div> <!-- @rows -->
+        </div> <!-- .body row -->
+        <div class="footer row">
+            <p>This page is created using the <a href="https://bitbucket.org/gvanderest/exoskeleton" target="_blank">Exoskeleton</a> framework.</p>
+            <p>It also makes use of <a href="http://www.angularjs.org/" target="_blank">AngularJS</a> and <a href="http://coffeescript.org/" target="_blank">CoffeeScript</a> to set up the examples and test data, but is not required.</p>
+        </div> <!-- .footer row -->
+    </div> <!-- .container -->
+</div> <!-- .wrapper -->
+
+    </body>
+</html>
