@@ -39,7 +39,7 @@ Exoskeleton.controller('DemoController', ($scope) ->
 
         # For each size of columns (defaults to 16)..
         # Start building configurations..
-        for x in [1..total_columns]
+        for x in [1..(total_columns / 2)]
 
             # Column and its opposite
             opposites = {
@@ -62,7 +62,7 @@ Exoskeleton.controller('DemoController', ($scope) ->
 
 
             # Fully divisible sizes
-            if x < total_columns && total_columns % x == 0
+            if x < total_columns && total_columns % x == 0 && x < (total_columns / 2)
                 divisibles = {
                     classes: ['gutters']
                     columns: []
@@ -99,7 +99,6 @@ angular.bootstrap(document.getElementById('body'), ['Exoskeleton'])
             </div> <!-- .column-8 -->
         </div> <!-- .header row -->
         <div class="body row">
-            <p>{{ rows }}</p>
             <p>Select the 'size' class you wish to use: <select ng-model="size" ng-options="size as size.name for size in sizes"></select></p>
             <div ng-repeat="row in size.rows" ng-class="row.classes">
                 <div ng-repeat="col in row.columns" ng-class="col.classes"><div class="pretty">{{ col.text }}</div></div> <!-- @columns -->
