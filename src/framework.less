@@ -53,6 +53,11 @@ body {
     .@{prefix}-pad-left, .pad-left-@{prefix} { .pad-left; }
 }
 
+// Used for things that use negative logic, like "show-large"
+.generate-negative-formatting(@prefix) {
+    .@{prefix}-show, .show-@{prefix} { .hide; }
+}
+
 
 /*
 ______                     ___            _   _____       _
@@ -85,8 +90,9 @@ ______                     ___            _   _____       _
 // Generate for a single column
 .generate-column(@size, @column, @width) {
     .@{size}-@{column} {
-        width: @width;
+        display: block;
         float: left;
+        width: @width;
 
         & when(@debug = true) {
             border: 2px solid green;
@@ -128,14 +134,20 @@ ___  ___         _ _         _____                 _
 // Large (desktop) size only
 @media (min-width: @large-width) {
     .generate-size(large, @large-width);
+    .generate-negative-formatting(medium);
+    .generate-negative-formatting(small);
 }
 
 // Medium (tablet) size only
 @media (min-width: @medium-width) and (max-width: (@large-width - 1px)) {
+    .generate-negative-formatting(large);
     .generate-size(medium, @medium-width);
+    .generate-negative-formatting(small);
 }
 
 // Small (phone) size only
 @media (max-width: (@medium-width - 1px)) {
+    .generate-negative-formatting(large);
+    .generate-negative-formatting(medium);
     .generate-size(small, @small-width);
 }
