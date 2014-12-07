@@ -100,6 +100,9 @@ angular.bootstrap(document.getElementById('body'), ['Exoskeleton'])
         </div> <!-- .header row -->
         <div class="body row">
             <p>Select the 'size' class you wish to use: <select ng-model="size" ng-options="size as size.name for size in sizes"></select></p>
+            <h3 class="show-large">Current Screen Size is Large</h3>
+            <h3 class="show-medium">Current Screen Size is Medium</h3>
+            <h3 class="show-small">Current Screen Size is Small</h3>
             <div ng-repeat="row in size.rows" ng-class="row.classes">
                 <div ng-repeat="col in row.columns" ng-class="col.classes"><div class="pretty">{{ col.text }}</div></div> <!-- @columns -->
             </div> <!-- @rows -->
