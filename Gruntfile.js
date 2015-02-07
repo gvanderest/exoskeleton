@@ -43,9 +43,21 @@ module.exports = function(grunt) {
                 ],
                 'tasks': ['css']
             },
+        },
+        'ftp-deploy': {
+            latest: {
+                auth: {
+                    host: 'exo.me',
+                    port: 21,
+                    authKey: 'release'
+                },
+                src: '/domains/exoskeleton.exo.me/html/latest',
+                dest: 'html/'
+            }
         }
     });
 
     grunt.registerTask('css', ['less', 'cssmin', 'clean:build']);
     grunt.registerTask('default', ['clean', 'css', 'clean:build']);
+    grunt.registerTask('deploy', ['default', 'ftp-deploy:release']);
 };
