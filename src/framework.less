@@ -5,8 +5,8 @@
 @medium-width: 720px;
 @small-width: 100%;
 
-@vertical-padding: 10px;
-@horizontal-padding: 20px;
+@vertical-padding: 5px;
+@horizontal-padding: 5px;
 
 
 /*
@@ -31,6 +31,16 @@ body {
     line-height: 1.3;
 }
 
+.clearfix, .clear, .full-row {
+    clear: both;
+    min-height: 1px;
+
+    &::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
 .align-left { text-align: left; }
 .align-center { text-align: center; }
 .align-right { text-align: right; }
@@ -71,15 +81,10 @@ ______                     ___            _   _____       _
 */
 .generate-row(@width) {
     .row {
+        .full-row;
+
         width: @width;
-        clear: both;
-        margin: 0 auto;
-        min-height: 1px;
-        &::after {
-            content: '';
-            display: block;
-            clear: both;
-        }
+        margin: 0 auto 0 auto;
 
         & when(@debug = true) {
             border: 2px solid red;
@@ -92,11 +97,19 @@ ______                     ___            _   _____       _
     .@{size}-@{column} {
         display: block;
         float: left;
-        width: @width;
+        width: calc(@width ~" - " (@horizontal-padding * 2));
 
-        & when(@debug = true) {
-            border: 2px solid green;
+        margin-bottom: @vertical-padding;
+        margin-left: @horizontal-padding;
+        margin-right: @horizontal-padding;
+
+        &.no-gutter, &.gutterless {
+            width: @width;
+            margin: 0;
         }
+
+
+        & when(@debug = true) { border: 2px solid green; }
     }
 }
 
@@ -110,11 +123,38 @@ ______                     ___            _   _____       _
     .generate-column(@size, half, 50%);
 }
 
+// Generate the opposite styles for a row
+.generate-negative-row(@width) {
+    .row {
+    }
+}
+// Generate the opposite styles for a single column
+.generate-negative-column(@size, @column, @width) {
+    .@{size}-@{column} {
+        margin-bottom: @vertical-padding;
+        &.no-gutter, &.gutterless {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// Generator for negative generate-columns
+.generate-negative-columns(@size, @i: 1) when (@i =< @total-generate-columns) {
+    .generate-negative-column(@size, @i, (@i * 100% / @total-generate-columns));
+    .generate-negative-columns(@size, (@i + 1));
+}
+
 // Generate all the styles needed for a media query
 .generate-size(@label, @width) {
     .generate-row(@width);
     .generate-columns(@label);
-    .generate-formatting(@label)
+    .generate-formatting(@label);
+}
+
+.generate-negative-size(@label) {
+    .generate-negative-formatting(@label);
+    .generate-negative-row(@label);
+    .generate-negative-columns(@label);
 }
 
 // Generate the columns with no width
@@ -134,20 +174,20 @@ ___  ___         _ _         _____                 _
 // Large (desktop) size only
 @media (min-width: @large-width) {
     .generate-size(large, @large-width);
-    .generate-negative-formatting(medium);
-    .generate-negative-formatting(small);
+    .generate-negative-size(medium);
+    .generate-negative-size(small);
 }
 
 // Medium (tablet) size only
 @media (min-width: @medium-width) and (max-width: (@large-width - 1px)) {
-    .generate-negative-formatting(large);
+    .generate-negative-size(large);
     .generate-size(medium, @medium-width);
-    .generate-negative-formatting(small);
+    .generate-negative-size(small);
 }
 
 // Small (phone) size only
 @media (max-width: (@medium-width - 1px)) {
-    .generate-negative-formatting(large);
-    .generate-negative-formatting(medium);
+    .generate-negative-size(large);
+    .generate-negative-size(medium);
     .generate-size(small, @small-width);
 }

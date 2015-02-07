@@ -5,14 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="release/exoskeleton.min.css" />
         <style>
-        .column {
-            padding: 0 5px 5px 0;
-        }
         .pretty {
             background: #aaa;
             text-align: center;
             border-radius: 3px;
-            padding: 5px 10px;
+            padding: 5px 0;
         }
         </style>
         <script src="http://coffeescript.org/extras/coffee-script.js"></script>
@@ -81,7 +78,7 @@ Exoskeleton.controller('DemoController', ($scope) ->
     for size in sizes
         for row in size.rows
             for col in row.columns
-                col.classes.push('column')
+                do_nothing = true
 
     # Link to scope
     $scope.sizes = sizes
